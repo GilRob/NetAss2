@@ -111,6 +111,8 @@ bool loadShaders() {
 //INPUT handling
 float tx = 0.0f;
 float ty = 0.0f;
+float tx2 = 0.0f;
+float ty2 = 0.0f;
 GLuint filter_mode = GL_LINEAR;
 
 void keyboard() {
@@ -315,6 +317,126 @@ int main()
 	};
 
 
+	// Cube 2
+	static const GLfloat points2[] = {//front face, 2 triangles
+		-0.5f, -0.5f, 0.5f,//0  front face
+		0.5f, -0.5f, 0.5f, //3
+		-0.5f, 0.5f, 0.5f, //1
+		0.5f, -0.5f, 0.5f, //3
+		0.5f, 0.5f, 0.5f, //2
+		-0.5f, 0.5f, 0.5f, //1
+		0.5f, -0.5f, 0.5f, //3 Right face
+		0.5f, -0.5f, -0.5f, //7
+		0.5f, 0.5f, 0.5f, //2
+		0.5f, -0.5f, -0.5f, //7
+		0.5f, 0.5f, -0.5f, //6
+		0.5f, 0.5f, 0.5f,  //2
+		-0.5f, -0.5f, -0.5f, //4 Left face
+		-0.5f, -0.5f, 0.5f, //0
+		-0.5f, 0.5f, -0.5f, //5
+		-0.5f, -0.5f, 0.5f, //0
+		-0.5f, 0.5f, 0.5f,  //1
+		-0.5f, 0.5f, -0.5f, //5
+		-0.5f, 0.5f, 0.5f,  //1 Top face
+		0.5f, 0.5f, 0.5f,  //2
+		-0.5f, 0.5f, -0.5f,//5
+		0.5f, 0.5f, 0.5f,   //2
+		0.5f, 0.5f, -0.5f, //6
+		-0.5f, 0.5f, -0.5f, //5
+		-0.5f, -0.5f, -0.5f, //4 Bottom face
+		0.5f, -0.5f, -0.5f, //7
+		-0.5f, -0.5f, 0.5f, //0
+		0.5f, -0.5f, -0.5f, //7
+		0.5f, -0.5f, 0.5f, //3
+		-0.5f, -0.5f, 0.5f, //0
+		-0.5f, 0.5f, -0.5f, //5 Back face
+		0.5f, 0.5f, -0.5f, //6
+		-0.5f, -0.5f, -0.5f, //4
+		0.5f, 0.5f, -0.5f, //6
+		0.5f, -0.5f, -0.5f, //7
+		-0.5f, -0.5f, -0.5f, //4
+	};
+
+	// Color data
+	static const GLfloat colors2[] = {
+		0.0f, 0.0f, 1.0f,
+		0.0f, 0.0f, 1.0f,
+		0.0f, 0.0f, 1.0f,
+		1.0f, 0.0f, 0.0f,
+		1.0f, 0.0f, 0.0f,
+		1.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 1.0f,
+		0.0f, 1.0f, 1.0f,
+		0.0f, 1.0f, 1.0f,
+		0.0f, 0.0f, 1.0f,
+		0.0f, 0.0f, 1.0f,
+		0.0f, 0.0f, 1.0f,
+		1.0f, 0.0f, 0.0f,
+		1.0f, 0.0f, 0.0f,
+		1.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 1.0f,
+		0.0f, 1.0f, 1.0f,
+		0.0f, 1.0f, 1.0f,
+		0.0f, 0.0f, 1.0f,
+		0.0f, 0.0f, 1.0f,
+		0.0f, 0.0f, 1.0f,
+		1.0f, 0.0f, 0.0f,
+		1.0f, 0.0f, 0.0f,
+		1.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 1.0f,
+		0.0f, 1.0f, 1.0f,
+		0.0f, 1.0f, 1.0f
+	};
+
+	///////// TEXTURES ///////
+	static const GLfloat uv2[] = {
+		0.0f, 0.0f,
+		1.0f, 0.0f,
+		0.0f, 1.0f,
+		1.0f, 0.0f,
+		1.0f, 1.0f,
+		0.0f, 1.0f,
+		0.0f, 0.0f,
+		1.0f, 0.0f,
+		0.0f, 1.0f,
+		1.0f, 0.0f,
+		1.0f, 1.0f,
+		0.0f, 1.0f,
+		0.0f, 0.0f,
+		1.0f, 0.0f,
+		0.0f, 1.0f,
+		1.0f, 0.0f,
+		1.0f, 1.0f,
+		0.0f, 1.0f,
+		0.0f, 0.0f,
+		1.0f, 0.0f,
+		0.0f, 1.0f,
+		1.0f, 0.0f,
+		1.0f, 1.0f,
+		0.0f, 1.0f,
+		0.0f, 0.0f,
+		1.0f, 0.0f,
+		0.0f, 1.0f,
+		1.0f, 0.0f,
+		1.0f, 1.0f,
+		0.0f, 1.0f,
+		0.0f, 0.0f,
+		1.0f, 0.0f,
+		0.0f, 1.0f,
+		1.0f, 0.0f,
+		1.0f, 1.0f,
+		0.0f, 1.0f
+	};
+
 	//VBO
 	GLuint pos_vbo = 0;
 	glGenBuffers(1, &pos_vbo);
@@ -326,6 +448,16 @@ int main()
 	glBindBuffer(GL_ARRAY_BUFFER, color_vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
 
+	//VBO2
+	GLuint pos_vbo2 = 0;
+	glGenBuffers(1, &pos_vbo2);
+	glBindBuffer(GL_ARRAY_BUFFER, pos_vbo2);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(points2), points2, GL_STATIC_DRAW);
+
+	GLuint color_vbo2 = 1;
+	glGenBuffers(1, &color_vbo2);
+	glBindBuffer(GL_ARRAY_BUFFER, color_vbo2);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(colors2), colors2, GL_STATIC_DRAW);
 
 
 	// VAO
@@ -370,6 +502,44 @@ int main()
 	// Release the space used for your image once you're done
 	stbi_image_free(image);
 
+	//Cube2
+	glBindBuffer(GL_ARRAY_BUFFER, pos_vbo2);
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+
+	glBindBuffer(GL_ARRAY_BUFFER, color_vbo2);
+	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+
+	glEnableVertexAttribArray(3);
+	glEnableVertexAttribArray(4);
+
+	GLuint uv_vbo2 = 5;
+	glGenBuffers(1, &uv_vbo2);
+	glBindBuffer(GL_ARRAY_BUFFER, uv_vbo2);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(uv2), uv2, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ARRAY_BUFFER, uv_vbo2);
+
+	glEnableVertexAttribArray(5);
+	glVertexAttribPointer(5, 2, GL_FLOAT, GL_FALSE, 0, NULL);
+
+	loadImage();
+
+	GLuint textureHandle2;
+
+	glGenTextures(1, &textureHandle2);
+
+	// "Bind" the newly created texture : all future texture functions will modify this texture
+	glBindTexture(GL_TEXTURE_2D, textureHandle2);
+
+	// Give the image to OpenGL
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+	// Release the space used for your image once you're done
+	stbi_image_free(image);
+
 	// Load your shaders
 	if (!loadShaders())
 		return 1;
@@ -393,15 +563,27 @@ int main()
 	// create individual matrices glm::mat4 T R and S, then multiply them
 	Model = glm::translate(Model, glm::vec3(0.0f, 0.0f, 0.0f));
 
+	///Model 2///
+	// Model matrix : an identity matrix (model will be at the origin)
+	glm::mat4 Model2 = glm::mat4(1.0f);
+	// create individual matrices glm::mat4 T R and S, then multiply them
+	Model2 = glm::translate(Model2, glm::vec3(0.0f, 0.0f, 0.0f));
+
 
 	// Our ModelViewProjection : multiplication of our 3 matrices
 	glm::mat4 mvp = Projection * View * Model; // Remember, matrix multiplication is the other way around
+
+	// Our ModelViewProjection : multiplication of our 3 matrices
+	glm::mat4 mvp2 = Projection * View * Model2; // Remember, matrix multiplication is the other way around
+
 
 	// Get a handle for our "MVP" uniform
 	// Only during initialisation
 	GLuint MatrixID =
 		glGetUniformLocation(shader_program, "MVP");
 
+	GLuint MatrixID2 =
+		glGetUniformLocation(shader_program, "MVP");
 
 	// Face culling
 	glEnable(GL_CULL_FACE);
@@ -440,16 +622,26 @@ int main()
 		glUseProgram(shader_program);
 
 		Model = glm::mat4(1.0f);
+		Model2 = glm::mat4(1.0f);
 
 		keyboard();
 
 		Model = glm::translate(Model, glm::vec3(tx, ty, -2.0f));
 		mvp = Projection * View * Model;
+		
+		Model2 = glm::translate(Model2, glm::vec3(tx2, ty2, -2.0f)); //Updates position values
+		mvp2 = Projection * View * Model2;
 
 		glBindVertexArray(vao);
 
 		glUniformMatrix4fv(MatrixID, 1,
 			GL_FALSE, &mvp[0][0]);
+
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+
+		glUniformMatrix4fv(MatrixID2, 1,
+			GL_FALSE, &mvp2[0][0]);
 
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
@@ -465,7 +657,14 @@ int main()
 
 		if (recv(Socket, recBuf, sizeof(recBuf), 0) > 0)
 		{
-			std::cout << recBuf << std::endl;
+			/*std::cout << "RECEIVED: " <<recBuf << std::endl;
+			std::string tmp = buf;
+			std::size_t pos = tmp.find("@"); //creates a position to separate data
+			tmp = tmp.substr(0, pos - 1); //Pos - 1 is tx
+			tx2 = std::stof(tmp, NULL); //Convert to float
+			tmp = buf; //Reset the temp variable 
+			tmp = tmp.substr(pos + 1); //pos + 1 is ty
+			ty2 = std::stof(tmp, NULL);*/
 		}
 	}
 
