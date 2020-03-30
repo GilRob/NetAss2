@@ -1,0 +1,68 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 16
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NetCube-UDPServer", "projects\NetCube-UDPServer\NetCube-UDPServer.vcxproj", "{F885CC21-649C-CAB7-AD13-56D919699B3F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GLFW", "external\glfw3\GLFW.vcxproj", "{154B857C-0182-860D-AA6E-6C109684020F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Glad", "external\glad\Glad.vcxproj", "{BDD6857C-A90D-870D-52FA-6C103E10030F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImGui", "external\imgui\ImGui.vcxproj", "{C0FF640D-2C14-8DBE-F595-301E616989EF}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MultipleClients Server", "projects\MultipleClients Server\MultipleClients Server.vcxproj", "{1AFB6551-06F5-8EA3-EF61-25B4DBFAF40F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MultipleClients-Client", "projects\MultipleClients-Client\MultipleClients-Client.vcxproj", "{CFFB4115-BBF5-6A67-A462-017890FBD0D3}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NetCube-UDPClient", "projects\NetCube-UDPClient\NetCube-UDPClient.vcxproj", "{E070F3FC-4C87-F192-95FE-7CB40154C21A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Stbs", "external\stbs\Stbs.vcxproj", "{818D8C7C-6DC4-8D0D-16B1-731002C7090F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Toolkit", "external\Toolkit\Toolkit.vcxproj", "{8BD8DD50-F7B7-5CEC-00D0-E7C26C2EC34D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F885CC21-649C-CAB7-AD13-56D919699B3F}.Debug|x64.ActiveCfg = Debug|x64
+		{F885CC21-649C-CAB7-AD13-56D919699B3F}.Debug|x64.Build.0 = Debug|x64
+		{F885CC21-649C-CAB7-AD13-56D919699B3F}.Release|x64.ActiveCfg = Release|x64
+		{F885CC21-649C-CAB7-AD13-56D919699B3F}.Release|x64.Build.0 = Release|x64
+		{154B857C-0182-860D-AA6E-6C109684020F}.Debug|x64.ActiveCfg = Debug|x64
+		{154B857C-0182-860D-AA6E-6C109684020F}.Debug|x64.Build.0 = Debug|x64
+		{154B857C-0182-860D-AA6E-6C109684020F}.Release|x64.ActiveCfg = Release|x64
+		{154B857C-0182-860D-AA6E-6C109684020F}.Release|x64.Build.0 = Release|x64
+		{BDD6857C-A90D-870D-52FA-6C103E10030F}.Debug|x64.ActiveCfg = Debug|x64
+		{BDD6857C-A90D-870D-52FA-6C103E10030F}.Debug|x64.Build.0 = Debug|x64
+		{BDD6857C-A90D-870D-52FA-6C103E10030F}.Release|x64.ActiveCfg = Release|x64
+		{BDD6857C-A90D-870D-52FA-6C103E10030F}.Release|x64.Build.0 = Release|x64
+		{C0FF640D-2C14-8DBE-F595-301E616989EF}.Debug|x64.ActiveCfg = Debug|x64
+		{C0FF640D-2C14-8DBE-F595-301E616989EF}.Debug|x64.Build.0 = Debug|x64
+		{C0FF640D-2C14-8DBE-F595-301E616989EF}.Release|x64.ActiveCfg = Release|x64
+		{C0FF640D-2C14-8DBE-F595-301E616989EF}.Release|x64.Build.0 = Release|x64
+		{1AFB6551-06F5-8EA3-EF61-25B4DBFAF40F}.Debug|x64.ActiveCfg = Debug|x64
+		{1AFB6551-06F5-8EA3-EF61-25B4DBFAF40F}.Debug|x64.Build.0 = Debug|x64
+		{1AFB6551-06F5-8EA3-EF61-25B4DBFAF40F}.Release|x64.ActiveCfg = Release|x64
+		{1AFB6551-06F5-8EA3-EF61-25B4DBFAF40F}.Release|x64.Build.0 = Release|x64
+		{CFFB4115-BBF5-6A67-A462-017890FBD0D3}.Debug|x64.ActiveCfg = Debug|x64
+		{CFFB4115-BBF5-6A67-A462-017890FBD0D3}.Debug|x64.Build.0 = Debug|x64
+		{CFFB4115-BBF5-6A67-A462-017890FBD0D3}.Release|x64.ActiveCfg = Release|x64
+		{CFFB4115-BBF5-6A67-A462-017890FBD0D3}.Release|x64.Build.0 = Release|x64
+		{E070F3FC-4C87-F192-95FE-7CB40154C21A}.Debug|x64.ActiveCfg = Debug|x64
+		{E070F3FC-4C87-F192-95FE-7CB40154C21A}.Debug|x64.Build.0 = Debug|x64
+		{E070F3FC-4C87-F192-95FE-7CB40154C21A}.Release|x64.ActiveCfg = Release|x64
+		{E070F3FC-4C87-F192-95FE-7CB40154C21A}.Release|x64.Build.0 = Release|x64
+		{818D8C7C-6DC4-8D0D-16B1-731002C7090F}.Debug|x64.ActiveCfg = Debug|x64
+		{818D8C7C-6DC4-8D0D-16B1-731002C7090F}.Debug|x64.Build.0 = Debug|x64
+		{818D8C7C-6DC4-8D0D-16B1-731002C7090F}.Release|x64.ActiveCfg = Release|x64
+		{818D8C7C-6DC4-8D0D-16B1-731002C7090F}.Release|x64.Build.0 = Release|x64
+		{8BD8DD50-F7B7-5CEC-00D0-E7C26C2EC34D}.Debug|x64.ActiveCfg = Debug|x64
+		{8BD8DD50-F7B7-5CEC-00D0-E7C26C2EC34D}.Debug|x64.Build.0 = Debug|x64
+		{8BD8DD50-F7B7-5CEC-00D0-E7C26C2EC34D}.Release|x64.ActiveCfg = Release|x64
+		{8BD8DD50-F7B7-5CEC-00D0-E7C26C2EC34D}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
