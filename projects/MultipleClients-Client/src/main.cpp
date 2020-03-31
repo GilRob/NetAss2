@@ -17,10 +17,11 @@
 #pragma comment(lib, "Ws2_32.lib")
 ///////////////////////
 
-#define UPDATE_INTERVAL 100
 #define MSG_SIZE 512
 
 GLFWwindow* window;
+
+float UPDATE_INTERVAL = 100.0f;
 
 unsigned char* image;
 int width, height; 
@@ -113,6 +114,7 @@ float tx = 0.0f;
 float ty = 0.0f;
 float tx2 = 0.0f;
 float ty2 = 0.0f;
+std::string recBufTemp = "0@0";
 GLuint filter_mode = GL_LINEAR;
 
 void keyboard() {
@@ -129,6 +131,17 @@ void keyboard() {
 		tx -= 0.001;
 	}
 	
+
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+		UPDATE_INTERVAL += 25;
+	}
+	if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS) {
+		UPDATE_INTERVAL -= 25;
+		if (UPDATE_INTERVAL <= 0.0f)
+		{
+			UPDATE_INTERVAL = 25.0f;
+		}
+	}
 
 	if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS) {
 		if (filter_mode == GL_LINEAR) {
@@ -657,14 +670,26 @@ int main()
 
 		if (recv(Socket, recBuf, sizeof(recBuf), 0) > 0)
 		{
-			/*std::cout << "RECEIVED: " <<recBuf << std::endl;
-			std::string tmp = buf;
+			std::cout << "RECEIVED: " <<recBuf << std::endl;
+			
+
+
+			if (recBufTemp != recBuf)
+			{
+				recBufTemp = recBuf;
+			}
+			if (sizeof(recBuf) < 0)
+			{
+				recBufTemp = recBufTemp;
+			}
+			
+			std::string tmp = recBufTemp;
 			std::size_t pos = tmp.find("@"); //creates a position to separate data
 			tmp = tmp.substr(0, pos - 1); //Pos - 1 is tx
-			tx2 = std::stof(tmp, NULL); //Convert to float
-			tmp = buf; //Reset the temp variable 
+			tx2 = std::strtof((tmp).c_str(), 0); //Convert to float
+			tmp = recBufTemp; //Reset the temp variable 
 			tmp = tmp.substr(pos + 1); //pos + 1 is ty
-			ty2 = std::stof(tmp, NULL);*/
+			ty2 = std::strtof((tmp).c_str(), 0);
 		}
 	}
 
