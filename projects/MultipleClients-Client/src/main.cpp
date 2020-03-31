@@ -25,6 +25,13 @@ GLFWwindow* window;
 unsigned char* image;
 int width, height; 
 
+//INPUT handling
+float tx = 0.01f;
+float ty = 0.01f;
+float txtemp = 0.01f;
+float tytemp = 0.0f;
+
+
 void loadImage() {
 	int channels;
 	stbi_set_flip_vertically_on_load(true);
@@ -107,13 +114,6 @@ bool loadShaders() {
 
 	return true;
 }
-
-//INPUT handling
-float tx = 0.01f;
-float ty = 0.01f;
-float txtemp = 0.01f;
-float tytemp = 0.0f;
-
 float deadX = 0.0f;
 float deadY = 0.0f;
 
@@ -487,8 +487,9 @@ int main()
 
 		if (txtemp != tx || tytemp != ty)
 		{
-			DeadReckoning(txtemp, tytemp, tx, ty);
+			//DeadReckoning(txtemp, tytemp, tx, ty);
 			std::cout << "I moved";
+			std::cout << tx << "x" << txtemp;
 			tx = deadX;
 			ty = deadY;
 			if (recv(Socket, recBuf, sizeof(recBuf), 0) > 0)
