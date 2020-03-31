@@ -110,25 +110,28 @@ bool loadShaders() {
 }
 
 //INPUT handling
-float tx = 0.0f;
-float ty = 0.0f;
+float tx = 0.001f;
+float ty = 0.001f;
+float temptx = 0.001f;
+float tempty = 0.001f;
 float tx2 = 0.0f;
 float ty2 = 0.0f;
-std::string recBufTemp = "0@0";
+float deadX = 0.0f;
+float deadY = 0.0f;
 GLuint filter_mode = GL_LINEAR;
 
 void keyboard() {
 	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
-		ty += 0.001;
+		ty += 0.1;
 	}
 	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-		ty -= 0.001;
+		ty -= 0.1;
 	}
 	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
-		tx += 0.001;
+		tx += 0.1;
 	}
 	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
-		tx -= 0.001;
+		tx -= 0.1;
 	}
 	
 
@@ -159,7 +162,21 @@ void keyboard() {
 
 
 }
+void DeadReckoning(float xi, float yi, float xf, float yf)
+{
+	//P=pk + v*t
+	//pk is last known position (have to do this for both x and y)
+	//v is velocity, the change
+	//t is a constnat: 500MS
+	float velocity = (xf - xi) / (yf - yi);
+	std::cout << "vel:" << velocity;
+	float t = 0.0005f;
+	std::cout << "t:" << t << std::endl;
+	tx2 = xf + velocity + t;
+	ty2 = yf + velocity + t;
+	std::cout << "xf:" << xf << "xy" << yf << std::endl;
 
+}
 int main()
 {
 	//Initialize GLFW
@@ -620,13 +637,14 @@ int main()
 		std::string msg = std::to_string(tx) + "@" + std::to_string(ty);
 		//increment c and store it in the buffer and do that over and over as if they were position updates
 		strcpy(sendBuf, (char*)msg.c_str());
-
 		//we have to send in interval
 		//can put this in threads if you wanted to make more interesitn 
 		//sleep tehn send message
 		//one thread for sending
 		//one thread for recievin
 		//create one single thread for receiving
+		
+		DeadReckoning(tx, tx2, temptx, tempty);
 		Sleep(UPDATE_INTERVAL);
 
 		glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
@@ -660,36 +678,25 @@ int main()
 
 		glfwSwapBuffers(window);
 
-		if (send(Socket, sendBuf, sizeof(sendBuf), 0) == 0)
-		{
-			std::cout << "Failed to send!\n";
-			closesocket(Socket);
-			WSACleanup();
-			break;
-		}
+			if (send(Socket, sendBuf, sizeof(sendBuf), 0) == 0)
+			{
+				std::cout << "Failed to send!\n";
+				closesocket(Socket);
+				WSACleanup();
+				break;
+			}
 
 		if (recv(Socket, recBuf, sizeof(recBuf), 0) > 0)
 		{
 			std::cout << "RECEIVED: " <<recBuf << std::endl;
 			
-
-
-			if (recBufTemp != recBuf)
-			{
-				recBufTemp = recBuf;
-			}
-			if (sizeof(recBuf) < 0)
-			{
-				recBufTemp = recBufTemp;
-			}
-			
-			std::string tmp = recBufTemp;
+			std::string tmp = recBuf;
 			std::size_t pos = tmp.find("@"); //creates a position to separate data
 			tmp = tmp.substr(0, pos - 1); //Pos - 1 is tx
-			tx2 = std::strtof((tmp).c_str(), 0); //Convert to float
-			tmp = recBufTemp; //Reset the temp variable 
+			temptx = std::strtof((tmp).c_str(), 0); //Convert to float
+			tmp = recBuf; //Reset the temp variable 
 			tmp = tmp.substr(pos + 1); //pos + 1 is ty
-			ty2 = std::strtof((tmp).c_str(), 0);
+			tempty = std::strtof((tmp).c_str(), 0);
 		}
 	}
 
