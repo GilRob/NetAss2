@@ -109,22 +109,28 @@ bool loadShaders() {
 }
 
 //INPUT handling
-float tx = 0.0f;
-float ty = 0.0f;
+float tx = 0.01f;
+float ty = 0.01f;
+float txtemp = 0.01f;
+float tytemp = 0.0f;
+
+float deadX = 0.0f;
+float deadY = 0.0f;
+
 GLuint filter_mode = GL_LINEAR;
 
 void keyboard() {
 	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
-		ty += 0.001;
+		ty += 0.1;
 	}
 	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-		ty -= 0.001;
+		ty -= 0.1;
 	}
 	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
-		tx += 0.001;
+		tx += 0.1;
 	}
 	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
-		tx -= 0.001;
+		tx -= 0.1;
 	}
 	
 
@@ -142,6 +148,21 @@ void keyboard() {
 	}
 
 
+
+}
+void DeadReckoning(float xi, float yi, float xf, float yf)
+{
+	//P=pk + v*t
+	//pk is last known position (have to do this for both x and y)
+	//v is velocity, the change
+	//t is a constnat: 500MS
+	float velocity = (xf - xi) / (yf - yi);
+	std::cout <<"vel:"<<velocity;
+	float t = 0.0005f; 
+	std::cout << "t:"<< t << std::endl;
+	deadX = xf + velocity + t;
+	deadY = yf + velocity + t;
+	std::cout << "xf:" <<xf<<"xy"<<yf << std::endl;
 
 }
 
@@ -425,7 +446,8 @@ int main()
 		std::string msg = std::to_string(tx) + "@" + std::to_string(ty);
 		//increment c and store it in the buffer and do that over and over as if they were position updates
 		strcpy(sendBuf, (char*)msg.c_str());
-
+		
+		
 		//we have to send in interval
 		//can put this in threads if you wanted to make more interesitn 
 		//sleep tehn send message
@@ -463,10 +485,28 @@ int main()
 			break;
 		}
 
-		if (recv(Socket, recBuf, sizeof(recBuf), 0) > 0)
+		if (txtemp != tx || tytemp != ty)
 		{
-			std::cout << recBuf << std::endl;
+			DeadReckoning(txtemp, tytemp, tx, ty);
+			std::cout << "I moved";
+			tx = deadX;
+			ty = deadY;
+			if (recv(Socket, recBuf, sizeof(recBuf), 0) > 0)
+			{
+				std::cout << recBuf << std::endl;
+			}
+			std::string tmp = recBuf;
+			std::size_t pos = tmp.find("@"); //creates a position to separate data
+			tmp = tmp.substr(0, pos - 1); //Pos - 1 is tx
+			txtemp = std::strtof((tmp).c_str(), 0); //Convert to float
+			tmp = recBuf; //Reset the temp variable 
+			tmp = tmp.substr(pos + 1); //pos + 1 is ty
+			tytemp = std::strtof((tmp).c_str(), 0);
+
 		}
+
+
+
 	}
 
 	shutdown(Socket, SD_BOTH);
