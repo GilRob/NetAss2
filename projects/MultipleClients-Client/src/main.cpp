@@ -1,3 +1,12 @@
+//GAME CLIENT
+/*
+////////////////////////////////////
+
+Jessica Le - 100555079
+Gil Robern - 100651824
+
+////////////////////////////////////
+*/
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
@@ -15,7 +24,6 @@
 #include <ws2tcpip.h>
 #include <stdio.h>
 #pragma comment(lib, "Ws2_32.lib")
-///////////////////////
 
 #define MSG_SIZE 512
 
@@ -167,6 +175,8 @@ void keyboard() {
 
 
 }
+
+//PREDICT MOVEMENT FOR THE OTHER BOX
 void DeadReckoning(float xi, float yi, float xf, float yf)
 {
 	
@@ -174,6 +184,7 @@ void DeadReckoning(float xi, float yi, float xf, float yf)
 	//pk is last known position (have to do this for both x and y)
 	//v is velocity, the change
 	//t is a constnat: 500MS
+
 	float velocity = (xf - xi) / (yf - yi);
 	//std::cout << "vel:" << velocity;
 	float t = 0.0005L; //500MS constant
@@ -634,25 +645,22 @@ int main()
 	float time = 0.0;
 	float previous = glfwGetTime();
 
-	int c = 0; 
+
 	while (!glfwWindowShouldClose(window))
 	{
 		glfwPollEvents();
 
+		//clear sendBuf
 		strcpy(sendBuf, "");
+
+		//create a message of our positions
 		std::string msg = std::to_string(tx) + "@" + std::to_string(ty);
-		//increment c and store it in the buffer and do that over and over as if they were position updates
+		
+		//put our message into sendBuf so we can send it to the server
 		strcpy(sendBuf, (char*)msg.c_str());
-		//we have to send in interval
-		//can put this in threads if you wanted to make more interesitn 
-		//sleep tehn send message
-		//one thread for sending
-		//one thread for recievin
-		//create one single thread for receiving
+	
 		Sleep(UPDATE_INTERVAL);
 		
-
-
 
 		glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -691,6 +699,7 @@ int main()
 		//temptx, tempty is getting last positions (from the server)
 		DeadReckoning(temptx, tempty, tx, ty);
 		
+		//RECIEVE STUFF FROM SERVER
 		if (recv(Socket, recBuf, sizeof(recBuf), 0) > 0)
 		{
 			std::cout << "RECEIVED: " <<recBuf << std::endl;

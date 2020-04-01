@@ -1,4 +1,4 @@
-//GAME SERVER
+
 /*
 - Recieve Updates from all clients
 - pack everything into one packet and distrbute it to all clients
@@ -19,6 +19,17 @@
 		- do this by using mutex objects
 		- buffer will be a mutex object
 */
+
+//GAME SERVER
+/*
+////////////////////////////////////
+
+Jessica Le - 100555079
+Gil Robern - 100651824
+
+////////////////////////////////////
+*/
+
 #include <iostream>
 #include <WinSock2.h>
 #include <windows.h>
