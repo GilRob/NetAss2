@@ -25,12 +25,16 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <GLM/glm.hpp>
+
 #pragma comment(lib, "ws2_32.lib")
 
 #define MAXHOSTS 32
-#define UPDATE_INTERVAL 100
 #define MSG_SIZE 512
 
+int UPDATE_INTERVAL = 100;
 //provide abstraction of a resource, don't need to know much about resource itself to use it
 //mutex is a program object that allows multiple program threads to share the same resource
 HANDLE hMutex; // mutex handles
@@ -40,6 +44,8 @@ char buf[MSG_SIZE] = { " " }; //shared resource
 SOCKET host[MAXHOSTS]; //array of client sockets
 
 int h = 0; //host count
+
+GLFWwindow* window;
 
 //DWORD is a double word
 //will be executed in a single thread
@@ -58,6 +64,7 @@ DWORD WINAPI send(LPVOID lpParam)
 			__try {
 				strcpy(tempBuf, buf); //send data we recieve from clients and put it in tempBuf
 				strcpy(buf, ""); //initalize buffer
+				std::cout << "SEND: " << tempBuf << std::endl;
 			}
 			__finally {
 				//if eveything was okay then we release the mutex so other threads can use it
@@ -68,7 +75,7 @@ DWORD WINAPI send(LPVOID lpParam)
 				}
 				else
 				{
-					printf("Mutex Released Send\n");
+					//printf("Mutex Released Send\n");
 					break;
 				}
 			}
@@ -152,6 +159,7 @@ DWORD WINAPI recieve(LPVOID lpParam)
 					//append data to this buffer (shared) and send all values ive recieved at once
 					strcat(buf, recBuf); //save the contents of my buffer into the shared buffer
 					strcat(buf, " "); //seperate osition updates from different clients
+					std::cout << "RECIEVE: " << recBuf << std::endl;
 				}
 				__finally {
 					if (!ReleaseMutex(hMutex))// release the mutex so others can use it
@@ -160,7 +168,7 @@ DWORD WINAPI recieve(LPVOID lpParam)
 						ExitProcess(0);
 					}
 					else {
-						printf("mutex releaseRecv\n");
+						//printf("mutex releaseRecv\n");
 						break;
 					}
 				}
@@ -176,6 +184,24 @@ DWORD WINAPI recieve(LPVOID lpParam)
 		}//end if
 	}
 
+}
+std::string input;
+void keyboard()
+{
+	//doesn't work atm
+	std::cin >> input;
+	if (input == "a") {
+		UPDATE_INTERVAL += 25;
+		std::cout << UPDATE_INTERVAL;
+	}
+	if (input=="z") {
+		UPDATE_INTERVAL -= 25;
+		std::cout << UPDATE_INTERVAL;
+		if (UPDATE_INTERVAL <= 0.0f)
+		{
+			UPDATE_INTERVAL = 25.0f;
+		}
+	}
 }
 
 int main()
@@ -233,6 +259,7 @@ int main()
 	//accept connections
 	while (true)
 	{
+		//keyboard();
 		//try to accept connections 
 		client = accept(sock, (struct sockaddr*) &from, &fromlen);
 		printf("Client connected!!\n");

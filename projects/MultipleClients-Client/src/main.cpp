@@ -110,28 +110,33 @@ bool loadShaders() {
 }
 
 //INPUT handling
-float tx = 0.001f;
-float ty = 0.001f;
-float temptx = 0.001f;
-float tempty = 0.001f;
+float tx = 0.0001f;
+float ty = 0.0001f;
+float temptx = 0.0001f;
+float tempty = 0.0001f;
 float tx2 = 0.0f;
 float ty2 = 0.0f;
 float deadX = 0.0f;
 float deadY = 0.0f;
 GLuint filter_mode = GL_LINEAR;
+bool keyEnter = false;
 
 void keyboard() {
 	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
 		ty += 0.1;
+		keyEnter = true;
 	}
 	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
 		ty -= 0.1;
+		keyEnter = true;
 	}
 	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
 		tx += 0.1;
+		keyEnter = true;
 	}
 	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
 		tx -= 0.1;
+		keyEnter = true;
 	}
 	
 
@@ -164,17 +169,18 @@ void keyboard() {
 }
 void DeadReckoning(float xi, float yi, float xf, float yf)
 {
+	
 	//P=pk + v*t
 	//pk is last known position (have to do this for both x and y)
 	//v is velocity, the change
 	//t is a constnat: 500MS
 	float velocity = (xf - xi) / (yf - yi);
-	std::cout << "vel:" << velocity;
-	float t = 0.0005f;
-	std::cout << "t:" << t << std::endl;
-	tx2 = xf + velocity + t;
-	ty2 = yf + velocity + t;
-	std::cout << "xf:" << xf << "xy" << yf << std::endl;
+	//std::cout << "vel:" << velocity;
+	float t = 0.0005L; //500MS constant
+	//std::cout << "t:" << t << std::endl;
+	tx2 = xi + velocity * t;
+	ty2 = yi + velocity * t;
+	//std::cout << "xf:" << tx2 << "xy" << ty2 << std::endl;
 
 }
 int main()
@@ -643,9 +649,10 @@ int main()
 		//one thread for sending
 		//one thread for recievin
 		//create one single thread for receiving
-		
-		DeadReckoning(tx, tx2, temptx, tempty);
 		Sleep(UPDATE_INTERVAL);
+		
+
+
 
 		glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -655,7 +662,6 @@ int main()
 		Model = glm::mat4(1.0f);
 		Model2 = glm::mat4(1.0f);
 
-		keyboard();
 
 		Model = glm::translate(Model, glm::vec3(tx, ty, -2.0f));
 		mvp = Projection * View * Model;
@@ -678,14 +684,13 @@ int main()
 
 		glfwSwapBuffers(window);
 
-			if (send(Socket, sendBuf, sizeof(sendBuf), 0) == 0)
-			{
-				std::cout << "Failed to send!\n";
-				closesocket(Socket);
-				WSACleanup();
-				break;
-			}
-
+		//getting the most recent positions
+		keyboard();
+		
+		//tx and ty is getting positions from the keyboard inputs
+		//temptx, tempty is getting last positions (from the server)
+		DeadReckoning(temptx, tempty, tx, ty);
+		
 		if (recv(Socket, recBuf, sizeof(recBuf), 0) > 0)
 		{
 			std::cout << "RECEIVED: " <<recBuf << std::endl;
@@ -697,8 +702,24 @@ int main()
 			tmp = recBuf; //Reset the temp variable 
 			tmp = tmp.substr(pos + 1); //pos + 1 is ty
 			tempty = std::strtof((tmp).c_str(), 0);
+		
 		}
-	}
+
+		//ONLY SEND INFO WHEN POSITION HAS CHANGED
+		if (keyEnter == true)
+		{
+			std::cout << "SENT:" << sendBuf << std::endl;
+			if (send(Socket, sendBuf, sizeof(sendBuf), 0) == 0)
+			{
+				std::cout << "Failed to send!\n";
+				closesocket(Socket);
+				WSACleanup();
+				break;
+			}
+		}
+
+		keyEnter = false;
+	}//end while
 
 	shutdown(Socket, SD_BOTH);
 	closesocket(Socket);
